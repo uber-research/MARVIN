@@ -1,0 +1,10 @@
+marvin.egg-info
+dist
+build
+*/__pycache__
+logs
+marvin/utils/basic*
+marvin/utils/output*
+LKH-3.0.6*
+marvin/utils/LKH
+marvin/data
