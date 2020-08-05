@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: Apache License",
+        "License :: Uber Non-Commercial License",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
