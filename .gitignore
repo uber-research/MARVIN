@@ -1,10 +1,16 @@
 marvin.egg-info
 dist
 build
-*/__pycache__
+marvin/__pycache__
+marvin/graph_gen/__pycache__
+marvin/models/__pycache__
+marvin/traffic_simulation/__pycache__
+marvin/trainers/__pycache__
+marvin/utils/__pycache__
 logs
 marvin/utils/basic*
 marvin/utils/output*
 LKH-3.0.6*
 marvin/utils/LKH
 marvin/data
+*.zip
