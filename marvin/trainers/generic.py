@@ -441,7 +441,7 @@ class Trainer:
 
             # Return the adjacency matrix to the original costs
             solution_matrix = graph.adj.cpu().numpy() * \
-                float(graph.dense_og.max() / graph.dense.max())
+                float(graph.actual_distance.max() / graph.dense.max())
 
             if self.args.traffic:
                 # calculate what a realistic set of congestion states would be
@@ -533,12 +533,12 @@ class Trainer:
                     div = max(1 - congestion[next] ** 3, 0.25) \
                         if self.args.traffic else 1
 
-                    cost += graph.dense_og[pos[i], next] / div
+                    cost += graph.actual_distance[pos[i], next] / div
 
                     if self.args.asynch:
-                        costs_so_far[i] += graph.dense_og[pos[i], next] / div
+                        costs_so_far[i] += graph.actual_distance[pos[i], next] / div
 
-                    agent_costs[i] += graph.dense_og[pos[i], next] / div
+                    agent_costs[i] += graph.actual_distance[pos[i], next] / div
 
                     pos[i] = next
                     undiscovered[i][pos[i]] = 0.0
@@ -553,8 +553,8 @@ class Trainer:
                     div = max(1 - congestion[next] ** 3, 0.25) \
                         if self.args.traffic else 1
 
-                    cost += graph.dense_og[pos[i], next] / div
-                    agent_costs[i] += graph.dense_og[pos[i], next] / div
+                    cost += graph.actual_distance[pos[i], next] / div
+                    agent_costs[i] += graph.actual_distance[pos[i], next] / div
 
                     data_to_save['paths'][-1].append(copy.deepcopy(pos))
                     pos[i] = next

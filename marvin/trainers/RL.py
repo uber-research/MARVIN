@@ -218,7 +218,7 @@ class RLTrainer(Trainer):
                         div = max(1 - congestion[next] ** 3, 0.25) \
                             if self.args.traffic else 1
 
-                        temp_costs += graph.dense_og[pos[i], next] / div
+                        temp_costs += graph.actual_distance[pos[i], next] / div
 
                         pos[i] = next
                         undiscovered[i][pos[i]] = 0.0
@@ -240,7 +240,7 @@ class RLTrainer(Trainer):
                     div = max(1 - congestion[next] ** 3, 0.25) \
                         if self.args.traffic else 1
 
-                    temp_costs += graph.dense_og[pos[i], next] / div
+                    temp_costs += graph.actual_distance[pos[i], next] / div
 
                     pos[i] = next
 

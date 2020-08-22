@@ -75,7 +75,7 @@ class ILTrainer(Trainer):
 
             # Normalize the cost to the orginal street lengths
             solution_matrix = graph.adj.cpu().numpy() * \
-                float(graph.dense_og.max() / graph.dense.max())
+                float(graph.actual_distance.max() / graph.dense.max())
 
             if self.args.traffic:
                 # calculate what a realistic set of congestion states would be

@@ -14,6 +14,7 @@ This file processes the map graphs and creates objects that can be called upon
 to receive training and test data.
 '''
 
+import json
 import os
 import pickle
 from random import seed, shuffle
@@ -96,12 +97,17 @@ class DataGenerator:
             num_nodes = int(p.split("_")[0])
 
             if num_nodes < max_nodes and num_nodes > min_nodes:
-                g = LoadGraph(
-                    pickle.load(
-                        open(os.path.join(dataset_path, p),
-                             "rb"))
-                    )
-                graphs.append(g)
+                obj = json.load(open(os.path.join(
+                        dataset_path,
+                        p
+                ), 'r'))
+
+                items = obj.items()
+                for key, val in items:
+                    if key != 'points':
+                        obj[key] = torch.tensor(val)
+
+                graphs.append(LoadGraph(obj))
 
         return graphs
 
@@ -151,11 +157,16 @@ class DataGenerator:
 
             cls.index += 1
             if num_nodes < max_nodes and num_nodes > min_nodes:
-                return LoadGraph(
-                    pickle.load(open(os.path.join(
+                obj = json.load(open(os.path.join(
                         cls.train_path,
                         path
-                    ), 'rb'))
-                )
+                ), 'r'))
+
+                items = obj.items()
+                for key, val in items:
+                    if key != 'points':
+                        obj[key] = torch.tensor(val)
+
+                return LoadGraph(obj)
 
         raise NoViableGraph("No graph within the sizing constraints was found")

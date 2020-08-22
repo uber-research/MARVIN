@@ -68,7 +68,7 @@ class ProcessedGraph:
         self.pred = pred
         dense = torch.tensor(dist_matrix, device=device)
         self.dense = dense.float()
-        self.dense_og = self.dense * max_weight
+        self.actual_distance = self.dense * max_weight
         self.dense_norm = dense.float().clone()
         self.dense_norm = (self.dense_norm - self.dense_norm.mean()) \
             / (1e-5 + self.dense_norm.std())
