@@ -25,18 +25,18 @@ Here you can find our training code both for training with reinforcement learnin
  ```
 
  ## Training
- - Step 1: Download the data
+ - Step 1: Download the ground truth model
  ```
  bash download.sh
  ```
  It should be able to be found in the ```marvin/data``` folder
 
- - Step 2: Begin training
+ - Step 1: Begin training
 ```
 python train.py --tag <your-unique-tag>
 ```
 
-This will train the system on a set of static graphs from our dataset. In order to add in our realistic traffic conditions, run
+This will train the system on a randomly generated set of toy graphs. In order to add in our realistic traffic conditions, run
 
 ```
 python train.py --tag <your-unique-tag> --traffic --pass_range 3
@@ -72,12 +72,20 @@ python train.py --tag <your-unique-tag> --traffic --pass_range 3 --rl --eval --l
 
 ## Results
 
-Note that our results may not exactly match our paper since we have refactored this repository for understandibility, scaled down the numbers for readability, and tested with several random seeds, but when tested on models with a random seed of , we find the following results in terms of the average cost of a traversal:
+<!-- Note that our results may not exactly match our paper since we have refactored this repository for understandibility, scaled down the numbers for readability, and tested with several random seeds, but when tested on models with a random seed of , we find the following results in terms of the average cost of a traversal:
 
 Model        | 1 Agent 25 nodes | 2 Agents 25 Nodes | 2 Agents 50 nodes | 5 Agents 100 nodes
 ------------ | ---------------- | ----------------- | ----------------- | -------------
 MARVIN IL    | 5216             | 5145              | 8089              | 16644
-MARVIN RL    | 5037             | 5279              | 8382              | 16644
+MARVIN RL    | 5037             | 5279              | 8382              | 16644 -->
+
+We are currently working to release our street graph dataset. Currently we are in the licensing phase and we will be providing updates on its status as we receive them. As it stands, these are the average runtime costs when we train our system on our toy dataset with realistic conditions with a seed of 0.
+
+Model        | 2 Agents 25 Nodes | 5 Agents 50 nodes
+------------ | ----------------- | -----------------
+MARVIN IL    | 12.06             | 19.86
+GVIN         | 12.28             | 20.21
+GAT          | 22.85             | 47.80
 
 ### Training Curves
 
@@ -85,15 +93,23 @@ Here we illustrate what training should look like for imitation learning (left) 
 
 #### Loss
 
-Here is the loss function (cross entropy for imitation learning and policy gradient loss for reinforcement learning)
+<!-- Here is the loss function (cross entropy for imitation learning and policy gradient loss for reinforcement learning)
 
-<img src=img/il_marvin_loss.png width=45%> <img src=img/rl_marvin_loss.png width=45%>
+<img src=img/il_marvin_loss.png width=45%> <img src=img/rl_marvin_loss.png width=45%> -->
+
+Here is the loss function (orange is the Graph Attention Network, blue is the generalized value iteration network, and green is MARVIN)
+
+![Loss](img/loss_toy.png)
 
 #### Relative Performance
 
-Here is how the relative performance of our model when compared to the ground truth optimal.
+<!-- Here is how the relative performance of our model when compared to the ground truth optimal.
 
-<img src=img/relative_performance_il.png width=45%> <img src=img/relative_performance_rl.png width=45%>
+<img src=img/relative_performance_il.png width=45%> <img src=img/relative_performance_rl.png width=45%> -->
+
+Here is the relative performance of the above models, and how they evolve during the training process.
+
+![Relative_Performance](img/relative_performance_toy.png)
 
 ## Visualization
 
@@ -103,6 +119,7 @@ The value function that each agent creates can be visualized to determine what t
 
 ## TODO
 
+- Release dataset and dataset description
 - Parallelize training
 - Generalize training environment
 - Port to tensorflow

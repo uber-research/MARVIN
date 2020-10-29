@@ -111,7 +111,7 @@ parser.add_argument('--gamma',
                     help='gamma discount for RL')
 parser.add_argument('--pass_range',
                     type=int,
-                    default=1,
+                    default=3,
                     help='maximum number of times an agent \
                         may have to revisit a node')
 parser.add_argument('--model',
@@ -195,3 +195,6 @@ parser.add_argument('--tune', type=str2bool, nargs='?',
 parser.add_argument('--eval', type=str2bool, nargs='?',
                     const=True, default=False,
                     help='Validate on the testset')
+parser.add_argument('--random_dataset', type=str2bool, nargs='?',
+                    const=True, default=True,
+                    help='Train using a randomly generated tsp dataset')

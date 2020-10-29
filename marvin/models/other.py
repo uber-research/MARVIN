@@ -207,7 +207,7 @@ class GATNet(nn.Module):
         self.comm_decoding = nn.Linear(args.ch_q, args.comm_channels)
 
         # if we run with eval communication vector does not store grad
-        if self.args.display_only:
+        if self.args.eval:
             self.comms = [torch.zeros((
                 1, self.args.num_nodes, self.args.comm_channels),
                     device=device)
@@ -330,7 +330,7 @@ class GATNet(nn.Module):
 
         out = self.decoding(x).squeeze()  # (n,)
 
-        s = self.final_feature_process(out, graph, pos, mask)
+        s = self.final_feature_process(out, mask)
         self.comms[index] = comms
 
         return s

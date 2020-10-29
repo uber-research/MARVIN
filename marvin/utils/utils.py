@@ -102,7 +102,7 @@ def _modify_adj(adj, starting_poses, same_start, is_tour):
         # the minimum distance between each node and all possible return depots
         # This means the agents are assumed to be able to return to any depot
         start = np.array(
-            [[10000 for _ in range(adj.shape[0])]])
+            [[2000 for _ in range(adj.shape[0])]])
         for s in starting_poses:
             start[0, s] = 0.0
 
@@ -118,7 +118,7 @@ def _modify_adj(adj, starting_poses, same_start, is_tour):
         # starting nodes and zero cost to return to this node from any node
 
         start = np.array(
-            [[10000 for _ in range(adj.shape[0])]])
+            [[2000 for _ in range(adj.shape[0])]])
         for s in starting_poses:
             start[0, s] = 0.01
 
@@ -129,7 +129,7 @@ def _modify_adj(adj, starting_poses, same_start, is_tour):
     # in the standard case do nothing since this is what is expected by default
 
     for i in range(len(adj)):
-        adj[i, i] = 10000
+        adj[i, i] = 2000
 
     return adj
 
@@ -174,7 +174,7 @@ def _parse_multi_agents(output_file, largest, mapping, same_start,
 
         tours.append(steps)
 
-        costs.append(numbers[-1] / 1000. * largest)
+        costs.append(numbers[-1] / 200. * largest)
 
     return costs, tours
 
@@ -198,7 +198,7 @@ def _parse_single_agents(output_file, largest, mapping,
     """
     numbers = re.findall('\d+', output_file[1])
     numbers = map(int, numbers)
-    distance = max(numbers) / 1000. * largest
+    distance = max(numbers) / 200. * largest
 
     if is_tour:
         index = 6
@@ -337,7 +337,7 @@ class optimized:
         f = open(file_name, 'w')
 
         # stringify the adjacency matrix
-        adj_string = [[str(int(adj[i, j] / largest * 1000))
+        adj_string = [[str(int(adj[i, j] / largest * 200))
                        for j in range(adj.shape[1])] for i in range(
                            adj.shape[0]
                         )]

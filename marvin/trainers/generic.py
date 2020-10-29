@@ -49,7 +49,10 @@ class Trainer:
         self.initialize_constants()
         self.initialize_tensorboard()
 
-        if self.args.eval:
+        if self.args.random_dataset:
+            self.testset = \
+                DataGenerator.random_dataset(100, self.args)
+        elif self.args.eval:
             self.testset = \
                 DataGenerator.dataset_testset(400, args=self.args)
         else:
@@ -86,7 +89,7 @@ class Trainer:
         self.eps = self.args.eps
         self.epoch = 0
         self.ce = nn.CrossEntropyLoss()
-        self.identifier = time()
+        self.identifier = str(time())
         # ## specify for each trainer the name
         self.trainer = ''
 

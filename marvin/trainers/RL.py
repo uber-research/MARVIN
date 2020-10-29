@@ -123,7 +123,11 @@ class RLTrainer(Trainer):
         history = torch.tensor([], device=device)
 
         for _ in range(self.args.batch_size):
-            graph = self.allocate_graph(DataGenerator.get_graph(self.args))
+            if self.args.random_dataset:
+                graph = self.allocate_graph(DataGenerator.random_dataset(1, self.args)[0])
+            else:
+                graph = self.allocate_graph(DataGenerator.get_graph(self.args))
+
             self.args.num_nodes = graph.adj.shape[0]
 
             pos = [random.randint(0, self.args.num_nodes - 1)
@@ -197,7 +201,7 @@ class RLTrainer(Trainer):
                                                  graph,
                                                  i,
                                                  pos[i],
-                                                 action).view(-1).cuda()
+                                                 action).view(-1)
 
                     if history.shape != (0,):
                         history = torch.cat((history, prob))

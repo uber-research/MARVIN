@@ -16,8 +16,10 @@ to receive training and test data.
 
 import json
 import os
+from marvin.utils.utils import optimized
+import numpy as np
 import pickle
-from random import seed, shuffle
+from random import seed, shuffle, randint
 
 import torch  # noqa F401
 
@@ -122,6 +124,67 @@ class DataGenerator:
                                  num_graphs, **kwargs)
 
     @classmethod
+    def random_dataset(cls, num_graphs, args):
+        """
+        Generates a random set of tsp graphs for generic training purposes
+
+        Arguments:
+            num_graphs {int} -- number of graph to generate in this dataset
+
+        Keyword Arguments:
+            args {argparse.ArgumentParser} --
+                [arguments object] (default: {None})
+            min_size {int} -- [min graph size to be loaded] (default: {10})
+            max_size {int} -- [max graph size to be loaded] (default: {30})
+
+        Returns:
+            List[ProcessedGraph] -- list of all the process graphs
+        """
+
+        max_size = args.max_size
+        min_size = args.min_size
+
+        graphs = []
+        for i in range(num_graphs):
+            size = randint(min_size, max_size)
+
+            # randomly generate points of the desired size for standard tsp graph
+            points = torch.rand((size, 1, 2))
+            adj = points.expand(size, size, 2) - points.transpose(0, 1).expand(size, size, 2)
+
+            # distance matrix
+            adj = adj.norm(dim=-1)
+
+            transition_matrix = torch.ones((size, size))
+            speeds = torch.ones((size, size))
+
+            # all nodes can connect to all other nodes directly
+            norm_trans = transition_matrix / size
+
+            # finds shortest path between all nodes
+            pred = torch.tensor(optimized.fw_pred(adj.numpy()))
+            dense = torch.clone(adj)
+            actual_distance = torch.clone(dense)
+
+            # normalized distance matrix
+            dense_norm = (dense - dense.mean()) / (1e-5 + dense.std())
+
+            graphs.append(LoadGraph({
+                'points': points,
+                'speeds': speeds,
+                'adj': adj,
+                'transition_matrix': transition_matrix,
+                'norm_trans': norm_trans,
+                'pred': pred,
+                'dense': dense,
+                'actual_distance': actual_distance,
+                'dense_norm': dense_norm
+            }))
+
+        return graphs
+
+
+    @classmethod
     def get_graph(cls, args=None, min_size=10, max_size=30):
         """Loads a graph object within the sizing constraints
 
@@ -166,6 +229,8 @@ class DataGenerator:
                 for key, val in items:
                     if key != 'points':
                         obj[key] = torch.tensor(val)
+
+                import ipdb; ipdb.set_trace()
 
                 return LoadGraph(obj)
 
