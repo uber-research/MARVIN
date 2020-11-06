@@ -6,3 +6,7 @@ mv LKH ../marvin/utils/
 cd ..
 rm LKH-3.0.6.tgz
 rm -r LKH-3.0.6
+mkdir marvin/data
+mkdir marvin/data/train_graphs
+mkdir marvin/data/test_graphs
+mkdir marvin/data/val_graphs
